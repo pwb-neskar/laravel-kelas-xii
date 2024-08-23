@@ -44,11 +44,13 @@ class FilmController extends Controller
     public function store(StoreFilmRequest $request)
     {
         //
+        $posterPath = $request->file('poster')->store('images');
+
         $details = [
             'title'     => $request->title,
             'sinopsis'  => $request->sinopsis,
             'year'      => $request->year,
-            'poster'    => 'storage/images/c6.jpg',
+            'poster'    => $posterPath,
             'genre_id'  => $request->genre_id,
         ];
 

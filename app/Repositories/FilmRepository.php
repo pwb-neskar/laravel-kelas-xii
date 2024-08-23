@@ -22,5 +22,5 @@ class FilmRepository implements FilmRepositoryInterface
 
     public function store(array $data){
         return Film ::create($data);
-     }
+    }
 }

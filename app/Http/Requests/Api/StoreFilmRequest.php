@@ -28,7 +28,7 @@ class StoreFilmRequest extends FormRequest
             'title'     => 'required',
             'sinopsis'  => 'required',
             'year'      => 'required',
-            // 'poster'    => 'required|image|mimes:png,jpg,jpeg,gif',
+            'poster'    => 'required|image|mimes:png,jpg,jpeg,gif',
             'genre_id'  => 'required|exists:genres,id',
         ];
     }
