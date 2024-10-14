@@ -21,6 +21,14 @@ class FilmRepository implements FilmRepositoryInterface
     }
 
     public function store(array $data){
-        return Film ::create($data);
+        return Film::create($data);
+    }
+
+    public function update(array $data, $id){
+        return Film::whereId($id)->update($data);
+    }
+
+    public function delete($id){
+        return Film::destroy($id);
     }
 }

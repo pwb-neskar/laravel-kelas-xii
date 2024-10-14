@@ -16,7 +16,7 @@ class ApiResponseClass
         self::throw($e, $message);
     }
 
-    public static function throw($e, $message ="Something went wrong! Process not completed"){
+    public static function throw($e, $message ="Something went wrong!! Process not completed"){
         Log::info($e);
         throw new HttpResponseException(response()->json(["message"=> $message], 500));
     }

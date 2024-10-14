@@ -8,7 +8,11 @@ use Illuminate\Http\Request;
 use App\Interfaces\FilmRepositoryInterface;
 use App\Classes\ApiResponseClass;
 use App\Http\Resources\FilmResource;
-use App\Http\Requests\Api\StoreFilmRequest;
+use App\Http\Requests\Api\{
+    StoreFilmRequest,
+    UpdateFilmRequest
+};
+
 
 use Illuminate\Support\Facades\DB;
 
@@ -85,16 +89,39 @@ class FilmController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateFilmRequest $request, string $id)
     {
         //
+        $posterPath = $request->file('poster')->store('images');
+
+        $updateDetails = [
+            'title'     => $request->title,
+            'sinopsis'  => $request->sinopsis,
+            'year'      => $request->year,
+            'poster'    => $posterPath,
+            'genre_id'  => $request->genre_id,
+        ];
+        
+        DB::beginTransaction();
+        try {
+            $film = $this->filmRepositoryInterface->update($updateDetails, $id);
+            DB::commit();
+
+            return ApiResponseClass::sendResponse('Film Update Successful',201);
+
+        } catch(\Exception $ex) {
+            return ApiResponseClass::rollback($ex);
+        }
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
         //
+        $this->filmRepositoryInterface->delete($id);
+        return ApiResponseClass::sendResponse('Movies Delete Successful', 204);
     }
 }
