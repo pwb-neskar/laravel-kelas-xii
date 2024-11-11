@@ -11,7 +11,7 @@ class StoreFilmRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -20,9 +20,13 @@ class StoreFilmRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
-        return [
-            //
-        ];
-    }
+{
+    return [
+        'title' => 'required',
+        'sinopsis' => 'required',
+        'year' => 'required|integer',
+        'poster' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'genre_id' => 'required|exists:genres,id'
+    ];
+}
 }

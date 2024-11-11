@@ -15,7 +15,8 @@
           <ul class="nav navbar-nav">
             <li class="w3_home_act {{ Route::current()->getName() == 'home' ? 'active' : '' }}"><a href="{{ route('home') }}">Home</a></li>
             <li class="dropdown {{ Route::current()->getName() == 'genre' ? 'active' : '' }}">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Genres <b class="caret"></b></a>
+              
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Genres<b class="caret"></b></a>
               <ul class="dropdown-menu multi-column columns-3">
                 <li>
                   <div class="col-sm-4">
@@ -36,7 +37,6 @@
               </ul>
             </li>
             <li class="w3_home_act {{ Route::current()->getName() == 'movies' ? 'active' : '' }}"><a href="{{ route('movies') }}">Movies</a></li>
-
           </ul>
         </nav>
       </div>

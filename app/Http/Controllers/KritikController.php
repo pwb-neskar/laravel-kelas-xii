@@ -30,6 +30,7 @@ class KritikController extends Controller
     public function store(StoreKritikRequest $request)
     {
         //
+       
     }
 
     /**
@@ -38,6 +39,7 @@ class KritikController extends Controller
     public function show(Kritik $kritik)
     {
         //
+      
     }
 
     /**
@@ -46,6 +48,7 @@ class KritikController extends Controller
     public function edit(Kritik $kritik)
     {
         //
+      
     }
 
     /**
@@ -54,7 +57,8 @@ class KritikController extends Controller
     public function update(UpdateKritikRequest $request, Kritik $kritik)
     {
         //
-    }
+        
+        }
 
     /**
      * Remove the specified resource from storage.
@@ -62,5 +66,6 @@ class KritikController extends Controller
     public function destroy(Kritik $kritik)
     {
         //
+        
     }
 }

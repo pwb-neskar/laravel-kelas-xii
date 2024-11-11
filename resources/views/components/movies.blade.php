@@ -12,7 +12,11 @@
                       <h4 class="latest-text">Movies Of Genre {{ $genreFilm->name }}</h4>
                     @else
                       <h4 class="latest-text">List Of Movies</h4>
-                    @endif
+                      <div class="container mt-4">
+                      <a href="{{ route('film.create') }}" class="btn btn-success mb-3 ms-auto">Tambah Film</a>
+                      <a href="{{ route('film.index') }}" class="btn btn-success mb-3 ms-auto">CRUD Film</a>
+                      @endif
+                
               <div class="container">
                 <div class="agileits-single-top">
                   <ol class="breadcrumb">

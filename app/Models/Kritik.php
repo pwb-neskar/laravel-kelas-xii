@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Kritik extends Model
 {
     use HasFactory;
-
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     protected $table = 'kritiks';
     protected $primaryKey = 'id';
     protected $fillable = [
