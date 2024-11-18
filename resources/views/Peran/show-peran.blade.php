@@ -61,7 +61,7 @@
             <tbody>
                 <tr>
                     <td>{{ $perans->actor }}</td>
-                    <td>{{ $perans->cast_id }}</td>
+                    <td>{{ $perans->cast->name }}</td>
                     <td>{{ $perans->film_id }}</td>
                 </tr>
             </tbody>
