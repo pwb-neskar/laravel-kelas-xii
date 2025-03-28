@@ -37,7 +37,8 @@ class CastController extends Controller
      */
     public function show(Cast $cast)
     {
-        //
+        $perans = Peran::with('cast')->get();
+
     }
 
     /**

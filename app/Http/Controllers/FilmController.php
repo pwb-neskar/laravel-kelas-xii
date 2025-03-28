@@ -26,6 +26,7 @@ class FilmController extends Controller
                 ->OrderBy('created_at', 'asc')
                 ->paginate(18);
         return view('components/movies', compact('films', 'genreFilm'));
+        
     }
 
     /**
@@ -67,6 +68,7 @@ class FilmController extends Controller
                         ->get();
         $perans         = Peran::all()->where('film_id', '=', $film->id);
         return view('components.movie-show', compact('film','filmByGenre','filmByRelease','comments', 'perans'));
+         
     }
 
     /**

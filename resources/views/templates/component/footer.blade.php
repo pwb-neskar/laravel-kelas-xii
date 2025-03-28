@@ -1,3 +1,4 @@
+<br>
 <div class="footer">
   <div class="container">
     <div class="w3ls_footer_grid">

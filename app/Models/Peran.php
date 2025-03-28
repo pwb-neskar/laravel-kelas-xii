@@ -10,4 +10,12 @@ class Peran extends Model
     use HasFactory;
     protected $table = 'perans';
     protected $fillable = ['actor', 'film_id', 'cast_id'];
+
+    // Peran.php (Model)
+public function cast()
+{
+    return $this->belongsTo(Cast::class);
 }
+
+}
+
