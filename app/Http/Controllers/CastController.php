@@ -2,65 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cast;
 use App\Http\Requests\StoreCastRequest;
 use App\Http\Requests\UpdateCastRequest;
+use App\Models\Cast;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CastController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $casts = Cast::withCount('perans')
+            ->when($request->q, fn ($query, $term) => $query->where('name', 'like', "%{$term}%"))
+            ->latest('id')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('admin.casts.index', compact('casts'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.casts.form', ['cast' => new Cast]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreCastRequest $request)
     {
-        //
+        Cast::create($request->validated());
+
+        return redirect()->route('admin.casts.index')->with('success', 'Cast berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Cast $cast)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Cast $cast)
     {
-        //
+        return view('admin.casts.form', compact('cast'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateCastRequest $request, Cast $cast)
     {
-        //
+        $cast->update($request->validated());
+
+        return redirect()->route('admin.casts.index')->with('success', 'Cast berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Cast $cast)
     {
-        //
+        DB::transaction(function () use ($cast) {
+            $cast->perans()->delete();
+            $cast->delete();
+        });
+
+        return redirect()->route('admin.casts.index')->with('success', 'Cast berhasil dihapus.');
     }
 }

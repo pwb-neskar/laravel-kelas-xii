@@ -6,7 +6,7 @@ License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 @include('templates.component.head')
 	
@@ -30,6 +30,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		</ul>
   </nav>
 </div>
+@if (session('success'))
+  <div class="container" style="margin-top:15px"><div class="alert alert-success">{{ session('success') }}</div></div>
+@endif
+@if (session('error'))
+  <div class="container" style="margin-top:15px"><div class="alert alert-danger">{{ session('error') }}</div></div>
+@endif
 <!-- /w3l-medile-movies-grids -->
 @yield('content')
 	<!-- //comedy-w3l-agileits -->
@@ -39,6 +45,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!-- Bootstrap Core JavaScript -->
 
 <script src="{{ asset('template/js/bootstrap.min.js') }}"></script>
+@stack('scripts')
 <script>
 	$(document).ready(function(){
 		$(".dropdown").hover(            
@@ -69,8 +76,18 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			$().UItoTop({ easingType: 'easeOutQuart' });
 			
 		});
-		@stack('script')
 		</script>
 <!-- //here ends scrolling icon -->
+@if (session('open_login') || $errors->login->any() || $errors->register->any())
+<script>
+  // buka modal login otomatis (setelah error validasi / saat diminta login)
+  $(document).ready(function () {
+    $('#myModal').modal('show');
+    @if ($errors->register->any())
+      $('.toggle').click(); // tampilkan form register
+    @endif
+  });
+</script>
+@endif
 </body>
 </html>

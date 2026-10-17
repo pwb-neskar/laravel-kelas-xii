@@ -2,65 +2,62 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Peran;
 use App\Http\Requests\StorePeranRequest;
 use App\Http\Requests\UpdatePeranRequest;
+use App\Models\Cast;
+use App\Models\Film;
+use App\Models\Peran;
+use Illuminate\Http\Request;
 
 class PeranController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $perans = Peran::with(['film:id,title', 'cast:id,name'])
+            ->when($request->q, fn ($query, $term) => $query->where('actor', 'like', "%{$term}%"))
+            ->latest('id')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('admin.perans.index', compact('perans'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.perans.form', [
+            'peran' => new Peran,
+            'films' => Film::orderBy('title')->get(['id', 'title']),
+            'casts' => Cast::orderBy('name')->get(['id', 'name']),
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StorePeranRequest $request)
     {
-        //
+        Peran::create($request->validated());
+
+        return redirect()->route('admin.perans.index')->with('success', 'Peran berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Peran $peran)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Peran $peran)
     {
-        //
+        return view('admin.perans.form', [
+            'peran' => $peran,
+            'films' => Film::orderBy('title')->get(['id', 'title']),
+            'casts' => Cast::orderBy('name')->get(['id', 'name']),
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdatePeranRequest $request, Peran $peran)
     {
-        //
+        $peran->update($request->validated());
+
+        return redirect()->route('admin.perans.index')->with('success', 'Peran berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Peran $peran)
     {
-        //
+        $peran->delete();
+
+        return redirect()->route('admin.perans.index')->with('success', 'Peran berhasil dihapus.');
     }
 }

@@ -3,10 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Genre;
-
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,11 +22,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
-        if(Schema::hasTable('genres'))
-        {
-            view()->share('genres', Genre::all());
-            Paginator::useBootstrap();
-        }
+        // Template memakai Bootstrap 3
+        Paginator::useBootstrapThree();
+
+        // Daftar genre hanya diambil saat navbar dirender
+        // (tidak lagi query ke DB setiap kali aplikasi boot, jadi artisan tidak error sebelum migrate)
+        View::composer('templates.component.navbar', function ($view) {
+            $view->with('genres', Genre::orderBy('name')->get());
+        });
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Kritik extends Model
 {
@@ -11,10 +12,15 @@ class Kritik extends Model
 
     protected $table = 'kritiks';
     protected $primaryKey = 'id';
-    protected $fillable = [
-        'comment',
-        'rating',
-        'film_id',
-        'user_id',
-    ];
+    protected $fillable = ['comment', 'rating', 'film_id', 'user_id'];
+
+    public function film(): BelongsTo
+    {
+        return $this->belongsTo(Film::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

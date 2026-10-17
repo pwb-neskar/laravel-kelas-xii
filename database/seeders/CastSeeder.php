@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use App\Models\Cast;
+use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 
 class CastSeeder extends Seeder
@@ -19,7 +20,7 @@ class CastSeeder extends Seeder
         $faker = Faker::create('id_ID');
         for($i = 1; $i <= 50; $i++){
             // insert data ke table cast menggunakan Faker
-            \DB::table('casts')->insert([
+            DB::table('casts')->insert([
                 'name' => $faker->name,
                 'age' => $faker->numberBetween(7,80),
                 'bio' => $faker->company,
