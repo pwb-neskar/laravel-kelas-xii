@@ -2,65 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Profile;
-use App\Http\Requests\StoreProfileRequest;
-use App\Http\Requests\UpdateProfileRequest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    // Lihat profil sendiri
+    public function show(Request $request)
     {
-        //
+        $user = $request->user()->load('profile');
+
+        return view('components.profile', compact('user'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Form ubah profil sendiri
+    public function edit(Request $request)
     {
-        //
+        $user = $request->user()->load('profile');
+
+        return view('components.profile-edit', compact('user'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreProfileRequest $request)
+    // Simpan perubahan profil sendiri
+    public function update(Request $request)
     {
-        //
-    }
+        $user = $request->user();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Profile $profile)
-    {
-        //
-    }
+        $data = $request->validate([
+            'name'   => ['required', 'string', 'max:255'],
+            'email'  => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'alamat' => ['nullable', 'string', 'max:255'],
+            'umur'   => ['nullable', 'integer', 'min:1', 'max:120'],
+            'bio'    => ['nullable', 'string', 'max:1000'],
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Profile $profile)
-    {
-        //
-    }
+        $user->update([
+            'name'  => $data['name'],
+            'email' => $data['email'],
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateProfileRequest $request, Profile $profile)
-    {
-        //
-    }
+        // Kolom profil bisa NOT NULL di database, jadi kosong diganti nilai bawaan
+        $user->profile->update([
+            'alamat' => $data['alamat'] ?? '-',
+            'umur'   => $data['umur'] ?? 0,
+            'bio'    => $data['bio'] ?? '-',
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Profile $profile)
-    {
-        //
+        return redirect()
+            ->route('profile.show')
+            ->with('success', 'Profil berhasil diperbarui.');
     }
 }

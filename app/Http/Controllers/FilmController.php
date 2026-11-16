@@ -8,8 +8,6 @@ use App\Models\{
     Kritik,
     Peran,
 };
-use App\Http\Requests\StoreFilmRequest;
-use App\Http\Requests\UpdateFilmRequest;
 use Carbon\Carbon;
 
 class FilmController extends Controller
@@ -29,22 +27,6 @@ class FilmController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreFilmRequest $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(Film $film)
@@ -60,37 +42,23 @@ class FilmController extends Controller
                         ->OrderBy('created_at', 'asc')
                         ->limit(9)
                         ->get();
-        $comments        = Kritik::select('comment', 'user_id')
-                        ->where('film_id', '=', $film->id)
-                        ->orderBy('created_at', 'asc')
+
+        // Komentar terbaru dulu, lengkap dengan nama penulisnya
+        $comments       = Kritik::select('kritiks.comment', 'kritiks.rating', 'users.name as user_name')
+                        ->join('users', 'users.id', '=', 'kritiks.user_id')
+                        ->where('kritiks.film_id', '=', $film->id)
+                        ->orderByDesc('kritiks.created_at')
+                        ->orderByDesc('kritiks.id')
                         ->limit(10)
                         ->get();
-        $perans         = Peran::all()->where('film_id', '=', $film->id);
+
+        // Daftar peran, lengkap dengan nama cast
+        $perans         = Peran::select('perans.actor', 'casts.name as cast_name')
+                        ->join('casts', 'casts.id', '=', 'perans.cast_id')
+                        ->where('perans.film_id', '=', $film->id)
+                        ->get();
+
         return view('components.movie-show', compact('film','filmByGenre','filmByRelease','comments', 'perans'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Film $film)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateFilmRequest $request, Film $film)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Film $film)
-    {
-        //
     }
 
     public function movieHome()

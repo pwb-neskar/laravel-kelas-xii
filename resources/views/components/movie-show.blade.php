@@ -59,7 +59,7 @@
                       <tbody>
                         @foreach ($perans as $peran)
                         <tr>
-                          <td class="w3-list-info">{{ $peran->cast_id }}</td>
+                          <td class="w3-list-info">{{ $peran->cast_name }}</td>
                           <td class="w3-list-info">{{ $peran->actor }}</td>
                         </tr>
                         @endforeach
@@ -118,20 +118,13 @@
           <div class="all-comments-info">
             <a href="#">Comments</a>
             <div class="agile-info-wthree-box">
-              <form>
-                <input type="text" placeholder="Name" required="">			           					   
-                <input type="text" placeholder="Email" required="">
-                <input type="text" placeholder="Phone" required="">
-                <textarea placeholder="Message" required=""></textarea>
-                <input type="submit" value="SEND">
-                <div class="clearfix"> </div>
-              </form>
+                @include('templates.component.kritik-form')
             </div>
           </div>
           <div class="media-grids">
             @foreach ($comments as $comment)
               <div class="media">
-                <h5>{{ $comment->user_id }}</h5>
+                <h5>{{ $comment->user_name }}</h5>
                 <div class="media-left">
                   <a href="#">
                     <img src="{{ asset('storage/images/user.jpg') }}" title="One movies" alt=" " />
@@ -139,6 +132,7 @@
                 </div>
                 <div class="media-body">
                   <p>{{ $comment->comment }}</p>
+                  <p><small>Rating: {{ $comment->rating }}/5</small></p>
                 </div>
               </div>
             @endforeach
